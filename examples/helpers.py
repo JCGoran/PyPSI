@@ -28,7 +28,7 @@ def makeFigs(voxdata, log=False, title='', colors=plt.cm.bone_r):
     fig.suptitle(title)
     axes[0][0].set_ylabel('Slice')
     axes[1][0].set_ylabel('Projection')
-    fig.colorbar(im, cax=axcb)	
+    fig.colorbar(im, cax=axcb)
     plt.show()
 
 # Makes a plot of positions and covariances in 2D 
@@ -47,8 +47,8 @@ def scatterEllipses(mass, pos, cov=None,  title='', color='black', maxsz=25, ran
             theta = np.degrees(np.arctan2(*vecs[:,0][::-1]))
             ellip = Ellipse(xy=x, width=width, height=height, angle=theta, lw=0, fc=color, alpha=(m/mmax)**(1./3))
             ax.add_artist(ellip)
-	ax.set_xlim([ran[0], ran[1]])
-	ax.set_ylim([ran[2], ran[3]])
+    ax.set_xlim([ran[0], ran[1]])
+    ax.set_ylim([ran[2], ran[3]])
     fig.subplots_adjust(wspace=0.0, hspace=0.0)
     fig.suptitle(title)
     plt.show()
