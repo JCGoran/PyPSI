@@ -18,7 +18,7 @@ class MassMapTests(TestCase):
 
         return
 
-        print
+        print()
         snap = 'data/snapshot_010'
         nside = 64 # 16 # 32
         mesh = psi.Mesh(filename=snap, loader='gadget2')
@@ -30,8 +30,8 @@ class MassMapTests(TestCase):
         elemmass = np.sum(mesh.mass)
         voxmass = np.sum(grid.fields["m"])
         err = np.abs(1.0-voxmass/elemmass)
-        print ' - total mass =', voxmass 
-        print " - mass error = ", err 
+        print(' - total mass =', voxmass) 
+        print(" - mass error = ", err) 
         hp.mollview(np.log10(grid.fields['m']), title='Mass map')
         plt.show()
         self.assertAlmostEqual(err, 0.0, delta=errtol)
@@ -42,7 +42,7 @@ class MassMapTests(TestCase):
         #return
 
         # load a mesh, make a grid, and voxelize
-        print
+        print()
         ngrid = 3*(64,) 
         snap = 'data/snapshot_010'
         mesh = psi.Mesh(filename=snap, loader='gadget2')
@@ -55,8 +55,8 @@ class MassMapTests(TestCase):
         elemmass = np.sum(mesh.mass)
         voxmass = np.sum(grid.fields["m"])
         err = np.abs(1.0-voxmass/elemmass)
-        print ' - total mass =', voxmass 
-        print " - mass error = ", err 
+        print(' - total mass =', voxmass) 
+        print(" - mass error = ", err) 
         #plt.imshow(np.log10(grid.fields["m"][:,:,32]))
         #plt.show()
         self.assertAlmostEqual(err, 0.0, delta=errtol)
@@ -69,23 +69,23 @@ class SamplingTests(TestCase):
         #return
 
         # load a mesh, make a grid, and voxelize
-        print
+        print()
         snap = 'data/snapshot_010'
         mesh = psi.Mesh(filename=snap, loader='gadget2')
         rst = psi.RStarTree(mesh)
 
         for sample_pos in [(10.,10.,13.),(19.,23.,29.),(10.,12.,13.)]:
             rho, vel = psi.VDF(mesh, sample_pos, tree=rst)
-            print 'Sampled %d streams' % len(rho)
-            print 'rho[0] =', rho[0]
-            print 'vel[0] =', vel[0]
+            print('Sampled %d streams' % len(rho))
+            print('rho[0] =', rho[0])
+            print('vel[0] =', vel[0])
 
     def test_rtree(self):
 
         #return
 
         # load a mesh, make a grid, and voxelize
-        print
+        print()
         snap = 'data/snapshot_010'
         mesh = psi.Mesh(filename=snap, loader='gadget2')
 
@@ -94,13 +94,13 @@ class SamplingTests(TestCase):
 
         qinds = rst.query(box=((10.,10.,10.,),(11.,11.2,11.3)))
 
-        print 'Queried indices from the tree!'
-        print 'Indices =', qinds.shape
-        print 'Connectivity =', mesh.connectivity[qinds].shape
-        print 'Elems =', mesh.pos[mesh.connectivity[qinds]].shape
-        print ' = Indices =', qinds[0]
-        print ' = Connectivity =', mesh.connectivity[qinds][0]
-        print ' = Elems =', mesh.pos[mesh.connectivity[qinds]][0]
+        print('Queried indices from the tree!')
+        print('Indices =', qinds.shape)
+        print('Connectivity =', mesh.connectivity[qinds].shape)
+        print('Elems =', mesh.pos[mesh.connectivity[qinds]].shape)
+        print(' = Indices =', qinds[0])
+        print(' = Connectivity =', mesh.connectivity[qinds][0])
+        print(' = Elems =', mesh.pos[mesh.connectivity[qinds]][0])
         
         
 
@@ -112,7 +112,7 @@ class FFTTests(TestCase):
     def test_phi_simple(self):
 
         # loads, voxelizes, and computes the potential field
-        print
+        print()
         dim = 3
         box = 128 
         win = 21.0 
@@ -126,7 +126,7 @@ class FFTTests(TestCase):
         phi = psi.phi(grid, Gn=G)
         analytic = np.sin(2*np.pi*nk*np.arange(box)/box)
         maxerr = np.max(np.abs(phi-analytic))
-        print ' - max absolute err in phi =', maxerr
+        print(' - max absolute err in phi =', maxerr)
 
         # test that the max error is small
         self.assertAlmostEqual(maxerr, 0.0, delta=errtol)
@@ -134,7 +134,7 @@ class FFTTests(TestCase):
     def test_powerspec(self):
 
         # loads, voxelizes, and computes the potential field
-        print
+        print()
         dim = 3
         box = 128 
         win = 13.0 
@@ -153,7 +153,7 @@ class FFTTests(TestCase):
         ptot_x = np.sum(grid.fields['m']**2)
         ptot_k = np.sum(P)
         maxerr = np.abs((ptot_x-ptot_k)/ptot_x)
-        print ' - max relative err (checking Parseval) =', maxerr
+        print(' - max relative err (checking Parseval) =', maxerr)
         self.assertAlmostEqual(maxerr, 0.0, delta=errtol)
 
 
@@ -165,25 +165,25 @@ class GridTests(TestCase):
     def test_grid_cart(self):
 
 
-        print
+        print()
         grid = psi.Grid(type='cart', n=(10,10,10)) # default is 64^3 unit box
-        print ' - type =', grid.type 
-        print ' - fields =', grid.fields['m'].dtype, grid.fields['m'].shape
-        print ' - window =', grid.winmin, grid.winmax
-        print ' - n =', grid.n
-        print ' - d =', grid.d
+        print(' - type =', grid.type) 
+        print(' - fields =', grid.fields['m'].dtype, grid.fields['m'].shape)
+        print(' - window =', grid.winmin, grid.winmax)
+        print(' - n =', grid.n)
+        print(' - d =', grid.d)
         center, boundary, vol = grid.getCellGeometry(cell=[123])
         #print center.shape, boundary.shape, vol.shape
         #print center, boundary, vol
 
     def test_grid_hpring(self):
-        print
+        print()
         grid = psi.Grid(type='hpring')
-        print ' - type =', grid.type 
-        print ' - fields =', grid.fields['m'].dtype, grid.fields['m'].shape
-        print ' - window =', grid.winmin, grid.winmax
-        print ' - n =', grid.n
-        print ' - d =', grid.d
+        print(' - type =', grid.type) 
+        print(' - fields =', grid.fields['m'].dtype, grid.fields['m'].shape)
+        print(' - window =', grid.winmin, grid.winmax)
+        print(' - n =', grid.n)
+        print(' - d =', grid.d)
 
         # get a pixel boundary
         center, boundary, vol = grid.getCellGeometry(cell=None, bstep=2)
@@ -193,12 +193,12 @@ class GridTests(TestCase):
 class MeshTests(TestCase):
 
     def test_mesh_init(self):
-        print
+        print()
         mesh = psi.Mesh(filename='data/snapshot_010', loader='gadget2')
-        print ' - pos =', mesh.pos.dtype, mesh.pos.shape
-        print ' - vel =', mesh.vel.dtype, mesh.vel.shape
-        print ' - conn =', mesh.connectivity.dtype, mesh.connectivity.shape
-        print ' - box =', mesh.boxmin, mesh.boxmax
+        print(' - pos =', mesh.pos.dtype, mesh.pos.shape)
+        print(' - vel =', mesh.vel.dtype, mesh.vel.shape)
+        print(' - conn =', mesh.connectivity.dtype, mesh.connectivity.shape)
+        print(' - box =', mesh.boxmin, mesh.boxmax)
 
 
 # test basic PSIMOD functionality 
@@ -218,7 +218,7 @@ class PSIMODTests(TestCase):
             f.seek(0)
             phi = np.fromfile(f, count=128**3,
                 dtype=np.float32).reshape((128,128,128))
-            print phi.shape, np.min(phi), np.max(phi)
+            print(phi.shape, np.min(phi), np.max(phi))
 
             # read velocity 
             f.seek(128**3)
@@ -229,7 +229,7 @@ class PSIMODTests(TestCase):
             f.seek(4*128**3)
             gradphi = np.fromfile(f, count=3*128**3,
                 dtype=np.float32).reshape((128,128,128,3))
-            print gradphi.shape, np.min(gradphi), np.max(gradphi)
+            print(gradphi.shape, np.min(gradphi), np.max(gradphi))
 
             f.close()
 
@@ -253,8 +253,8 @@ class PSIMODTests(TestCase):
         
         rayinfo = psi.beamtrace(grid=grid, metric=metric, obspos=(10.,9.,8.), obsvel=(0.,0.,0.))
 
-        print rayinfo.shape
-        print rayinfo[0,:,:]
+        print(rayinfo.shape)
+        print(rayinfo[0,:,:])
 
 
 
@@ -280,7 +280,7 @@ class PSIMODTests(TestCase):
 
         return
 
-        print
+        print()
         mesh = psi.Mesh(filename='data/snapshot_010', loader='gadget2')
         #mesh = psi.Mesh(filename='', loader='hacky_test')
         #mesh = psi.Mesh(filename='data/box128_010', loader='gadget2')
@@ -291,9 +291,9 @@ class PSIMODTests(TestCase):
         psi.skymap(grid=grid, mesh=mesh, bstep=1, mode=1)
 
         err = 1.0-np.sum(grid.fields["m"])
-        print "mass = ", np.sum(grid.fields["m"]), 'err =', err
-        print " - min = ", np.min(grid.fields["m"])
-        print " - max = ", np.max(grid.fields["m"])
+        print("mass = ", np.sum(grid.fields["m"]), 'err =', err)
+        print(" - min = ", np.min(grid.fields["m"]))
+        print(" - max = ", np.max(grid.fields["m"]))
 
         grid.fields["m"].tofile('data/annihilation128_shell.np')
         
