@@ -25,7 +25,7 @@ def xsn(v):
 # loop over all sample locations
 for sample_pos in hlp.sampleSphere(r=0.2, center=[10.,10.,13.], nsamp=5): 
 
-    print 'Next sample...'
+    print('Next sample...')
 
     # sample the multi-streaming region
     rho, vel = psi.VDF(mesh, tuple(sample_pos), tree=rst)
@@ -35,9 +35,9 @@ for sample_pos in hlp.sampleSphere(r=0.2, center=[10.,10.,13.], nsamp=5):
     nstr, rhotot, vbulk, sigv, rate = psi.crossStreams(rho, vel, xsnfunc=xsn)
 
     # print out the computed data
-    print ' - nstreams =', nstr
-    print ' - rhotot =', rhotot
-    print ' - vbulk =', vbulk
-    print ' - dispersion =', sigv
-    print ' - annihilation rate =', rate 
-    print
+    print(' - nstreams =', nstr)
+    print(' - rhotot =', rhotot)
+    print(' - vbulk =', vbulk)
+    print(' - dispersion =', sigv)
+    print(' - annihilation rate =', rate) 
+    print()

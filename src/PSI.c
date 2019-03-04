@@ -103,7 +103,7 @@ static void PSI_Grid2grid(Grid* grid, psi_grid* cgrid) {
 	memset(cgrid, 0, sizeof(psi_grid));
    
 	// get the enum grid type
-	cstr = PyString_AsString(grid->type);
+	cstr = PyUnicode_AsUTF8(grid->type);
 	if(strcmp(cstr, "cart") == 0)
 		cgrid->type = PSI_GRID_CART;
 	else if(strcmp(cstr, "hpring") == 0)
@@ -115,7 +115,7 @@ static void PSI_Grid2grid(Grid* grid, psi_grid* cgrid) {
 	cgrid->dim = PySequence_Length(grid->n);
 	seq = PySequence_Fast(grid->n, "expected a grid dim tuple");
 	for(ax = 0; ax < cgrid->dim; ++ax)
-		cgrid->n.ijk[ax] = PyInt_AS_LONG(PySequence_Fast_GET_ITEM(seq, ax));
+		cgrid->n.ijk[ax] = PyLong_AsLong(PySequence_Fast_GET_ITEM(seq, ax));
 	
 	
 	if(PySequence_Check(grid->winmin)) {
@@ -153,7 +153,7 @@ static void PSI_Metric2metric(Metric* metric, psi_metric* cmetric) {
 	cmetric->snapnum = -1;
    
 	// get the enum metric type
-	cstr = PyString_AsString(metric->type);
+	cstr = PyUnicode_AsUTF8(metric->type);
 	printf("Metric type = %s\n", cstr);
 
 	if(strcmp(cstr, "minkowski") == 0) {
@@ -254,7 +254,7 @@ static int Mesh_init(Mesh *self, PyObject *args, PyObject *kwds) {
 			return -1;
 		}
 		for(ax = 0; ax < 3; ++ax)
-			nside.ijk[ax] = PyInt_AsLong(PySequence_GetItem(n, ax));
+			nside.ijk[ax] = PyLong_AsLong(PySequence_GetItem(n, ax));
 
 		printf("Loaded nside = %d %d %d\n", nside.i, nside.j, nside.k);
 
@@ -631,7 +631,7 @@ static PyObject* Grid_getCellGeometry(Grid *self, PyObject *args, PyObject *kwds
 				// get its length
 				seq = PySequence_Fast(pyind, "not a sequence");
 				slen = PySequence_Fast_GET_SIZE(seq);
-				if(slen <= 0 || !PyInt_Check(PySequence_Fast_GET_ITEM(seq, 0))) 
+				if(slen <= 0 || !PyLong_Check(PySequence_Fast_GET_ITEM(seq, 0))) 
 					return NULL;
 			}
 	
@@ -652,7 +652,7 @@ static PyObject* Grid_getCellGeometry(Grid *self, PyObject *args, PyObject *kwds
 			pvdata = PyArray_DATA((PyArrayObject*)pyvol);
 			for(i = 0; i < slen; ++i) {
 				if(allcells) grind.i = i;
-				else grind.i = PyInt_AsLong(PySequence_Fast_GET_ITEM(seq, i));
+				else grind.i = PyLong_AsLong(PySequence_Fast_GET_ITEM(seq, i));
 	
 				// retrieve the grid geometry from the C lib
 				// set the array elements 
@@ -704,7 +704,7 @@ static int Grid_init(Grid *self, PyObject *args, PyObject *kwds) {
 	// peek at the grid type before parsing args
 	// parse arguments differently depending on what the grid type is
 	// certain grid types must correspond to certain arg patterns
-	type = PyString_AsString(PyDict_GetItemString(kwds, "type"));
+	type = PyUnicode_AsUTF8(PyDict_GetItemString(kwds, "type"));
 	if(strcmp(type, "cart") == 0 && 
 			PyArg_ParseTupleAndKeywords(args, kwds, "S|((ddd)(ddd))(iii)", kwlist, // for cart 
 			&pytype, &cgrid.window[0].x, &cgrid.window[0].y, &cgrid.window[0].z, 
@@ -1285,7 +1285,7 @@ static int Metric_init(Metric *self, PyObject *args, PyObject *kwds) {
 	memset(&cmetric, 0, sizeof(cmetric));
 
 	// peek at the metric type before parsing args
-	type = PyString_AsString(PyDict_GetItemString(kwds, "type"));
+	type = PyUnicode_AsUTF8(PyDict_GetItemString(kwds, "type"));
 	//if(strcmp(type, "flrw") == 0) {
 		////self->type = 
 		//printf("Flrw selected\n");		
@@ -1294,17 +1294,17 @@ static int Metric_init(Metric *self, PyObject *args, PyObject *kwds) {
 	if(strcmp(type, "minkowski") == 0 &&
 			PyArg_ParseTupleAndKeywords(args, kwds, "S", minkkw, &pytype)) {
 		self->type = pytype;
-		printf("Minkowski selected, %s\n", PyString_AsString(pytype));		
+		printf("Minkowski selected, %s\n", PyUnicode_AsUTF8(pytype));		
 	}
 	if(strcmp(type, "kerr") == 0 &&
 			PyArg_ParseTupleAndKeywords(args, kwds, "S", kerrkw, &pytype)) {
 		self->type = pytype;
-		printf("Kerr selected, %s\n", PyString_AsString(pytype));		
+		printf("Kerr selected, %s\n", PyUnicode_AsUTF8(pytype));		
 	}
 	else if(strcmp(type, "flrw") == 0 &&
 			PyArg_ParseTupleAndKeywords(args, kwds, "S|OS", flrwkw, &pytype, &params, &filepat)) {
 		self->type = pytype;
-		printf("FLRW selected, %s\n", PyString_AsString(pytype));		
+		printf("FLRW selected, %s\n", PyUnicode_AsUTF8(pytype));		
 	}
 	else {
 	

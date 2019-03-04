@@ -30,7 +30,7 @@ err = np.abs(1.0-voxmass/elemmass)
 
 
 # print the error and show the figure
-print 'Global error = %.10e' % err 
+print('Global error = %.10e' % err) 
 hlp.makeFigs(grid.fields['m'], log=True, title='Example 2: Voxelization of a cosmological density field')
 
 
